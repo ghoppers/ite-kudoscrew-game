@@ -25,6 +25,10 @@
         cursor: pointer;
         width: 45%;
     }
+
+    button#new-game-btn, button#start-btn {
+        margin: 10px auto;
+    }
     button.a_choice {background-color: yellow;  }
     button.b_choice {background-color: lightgreen;  }
     #question p{
@@ -53,8 +57,15 @@
         Lord Alexander Ravenwood, a wealthy aristocrat found dead in his study. As you delve into the investigation, 
         you uncover secrets, lies, and motives lurking within the manor's walls. Can you unravel the truth and bring the 
         perpetrator to justice?</p>
+    <div id="player-info">
+        <label for="player-name">Enter your name:</label>
+        <input type="text" id="player-name"><br>
+        <button id="start-btn" onclick="startGame()">Start Game</button>
+    </div>
     <div id="question"></div>
     <div id="choices"></div>
+    <div id="score-history"></div>
+    <button id="new-game-btn" style="display: none;" onclick="startNewGame()">Start New Game</button>
 </div>
 
 <script>
@@ -88,43 +99,42 @@
 
     let currentQuestion = 0;
     let score = 0;
+    let playerName = "";
+    let scoreHistory = [];
 
     const questionElement = document.getElementById("question");
     const choicesElement = document.getElementById("choices");
+    const scoreHistoryElement = document.getElementById("score-history");
+    const newGameButton = document.getElementById("new-game-btn");
 
-    // function fadeIn(element) {
-    //     element.style.opacity = "1";
-    // }
-
-    // function fadeOut(element) {
-    //     element.style.opacity = "0";
-    // }
+    function startGame() {
+        playerName = document.getElementById("player-name").value.trim();
+        if (playerName !== "") {
+            document.getElementById("player-info").style.display = "none";
+            displayQuestion();
+        } else {
+            alert("Please enter your name.");
+        }
+    }
 
     function displayQuestion() {
         if (currentQuestion < questions.length) {
             const question = questions[currentQuestion];
-            // fadeOut(questionElement);
-            // fadeOut(choicesElement);
-            // setTimeout(() => {
-                questionElement.innerHTML = "";
-                p_tag = document.createElement("p");
-                p_tag.textContent = question.question;
-                questionElement.appendChild(p_tag);
-                // questionElement.textContent = question.question;   
-                // fadeIn(questionElement);         
-                choicesElement.innerHTML = "";
-                question.choices.forEach((choice, index) => {
-                    const button = document.createElement("button");
-                    button.textContent = choice;
-                    // fadeIn(choicesElement);
-                    if(index == 0) 
-                        button.className = "a_choice";
-                    else
-                        button.className = "b_choice";
-                    button.onclick = () => checkAnswer(index);
-                    choicesElement.appendChild(button);
-                });
-            // }, 500);
+            questionElement.innerHTML = "";
+            p_tag = document.createElement("p");
+            p_tag.textContent = question.question;
+            questionElement.appendChild(p_tag);
+            choicesElement.innerHTML = "";
+            question.choices.forEach((choice, index) => {
+                const button = document.createElement("button");
+                button.textContent = choice;
+                if(index == 0) 
+                    button.className = "a_choice";
+                else
+                    button.className = "b_choice";
+                button.onclick = () => checkAnswer(index);
+                choicesElement.appendChild(button);
+            });    
         } else {
             endGame();
         }
@@ -139,17 +149,36 @@
     }
 
     function endGame() {
-        // fadeOut(questionElement);
-        // fadeOut(choicesElement);
-        // setTimeout(() => {
-            questionElement.textContent = "Game Over";
-            // fadeIn(questionElement);
-            choicesElement.innerHTML = `<p>Your final score is: ${score}</p>`;
-            // fadeIn(choicesElement);
-        // }, 500);
+        const playerScore = { name: playerName, score: score };
+        scoreHistory.push(playerScore);
+        scoreHistory.sort((a, b) => b.score - a.score); // Sort in descending order of score
+        updateScoreHistory();
+        questionElement.textContent = "Game Over";
+        choicesElement.innerHTML = `<p>Your final score is: ${score}</p>`;
+        newGameButton.style.display = "block";
     }
 
-    displayQuestion();
+    function startNewGame() {
+        currentQuestion = 0;
+        score = 0;
+        playerName = "";
+        document.getElementById("player-name").value = "";
+        document.getElementById("player-info").style.display = "block";
+        questionElement.innerHTML = "";
+        choicesElement.innerHTML = "";
+        scoreHistoryElement.innerHTML = "";
+        newGameButton.style.display = "none";
+    }
+
+    function updateScoreHistory() {
+        scoreHistoryElement.innerHTML = "<h2>Score History</h2>";
+        scoreHistory.forEach((entry, index) => {
+            const scoreEntry = document.createElement("p");
+            scoreEntry.textContent = `${index + 1}. ${entry.name}: ${entry.score}`;
+            scoreHistoryElement.appendChild(scoreEntry);
+        });
+    }
+
 </script>
 </body>
 </html>
