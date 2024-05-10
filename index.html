@@ -4,68 +4,85 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Murder Mystery Game</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <style>
     body {
         font-family: Arial, sans-serif;
         text-align: center;
+        background-image: linear-gradient(to bottom, #000080, #000000);
+        color: white;
     }
-    .container {
-        max-width: 700px;
+    #login-container {
+        max-width: 800px;
         margin: 0 auto;
-        padding: 20px 20px;
-        background-color: aquamarine;
-        height: 500px;
+        padding: 20px;
     }
-    
-    button {
+    #login-logo {
+        margin-bottom: 20px;
+    }
+    #login-form {
+        margin-bottom: 20px;
+    }
+    #story {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-image: url('images/background.jpg');
+        background-size: cover;
+        background-position: center;
+        display: none; /* Initially hidden */
+    }
+    #question-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.7); /* Add a semi-transparent white background */
+    }
+    #choices .btn {
         margin: 10px;
-        height: 100px;
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
-        width: 45%;
     }
-
-    button#new-game-btn, button#start-btn {
-        margin: 10px auto;
-    }
-    button.a_choice {background-color: yellow;  }
-    button.b_choice {background-color: lightgreen;  }
-    #question p{
-        margin: 20px 10px;
-        font-size: larger;
-        background-color: rgb(244, 181, 64);
-        padding: 10px 20px;
-        width: 91%;
-    }
-
-    #question p, button {
-        animation: fadeIn 2s;
-    }
-
-    @keyframes fadeIn {
-        0% { opacity: 0; }
-        100% { opacity: 1; }
+    #score-history {
+        margin-top: 20px;
+        text-align: left;
     }
 </style>
 </head>
 <body>
-<div class="container">
-    <h1>Murder Mystery Game</h1>
-    <p style="font-family: 'Times New Roman', Times, serif;">
-        Welcome to "Murder at Ravenwood Manor." You are an esteemed detective invited to solve the mysterious death of 
+<div id="login-container">
+    <div id="login-logo">
+        <img src="images/logo.png" alt="Logo" style="max-width: 200px;">
+    </div>
+    <div id="login-form">
+        <form>
+            <div class="form-group">
+                <label for="username" class="text-white">Username:</label>
+                <input type="text" class="form-control" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password" class="text-white">Password:</label>
+                <input type="password" class="form-control" id="password" required>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+        </form>
+    </div>
+</div>
+
+<div id="story" class="mt-4">
+    <p>Welcome to "Murder at Ravenwood Manor." You are an esteemed detective invited to solve the mysterious death of 
         Lord Alexander Ravenwood, a wealthy aristocrat found dead in his study. As you delve into the investigation, 
         you uncover secrets, lies, and motives lurking within the manor's walls. Can you unravel the truth and bring the 
         perpetrator to justice?</p>
-    <div id="player-info">
-        <label for="player-name">Enter your name:</label>
-        <input type="text" id="player-name"><br>
-        <button id="start-btn" onclick="startGame()">Start Game</button>
-    </div>
-    <div id="question"></div>
-    <div id="choices"></div>
-    <div id="score-history"></div>
-    <button id="new-game-btn" style="display: none;" onclick="startNewGame()">Start New Game</button>
+</div>
+
+<div id="question-container" style="display: none;">
+    <h1 class="mt-5" style="color: red;">Murder Mystery Game</h1>
+    <div id="question" class="question-container mt-4" style="color: black; font-weight: bolder;"></div>
+    <div id="choices" class="mt-4" style="color: black;"></div>
+    <div id="score-history" class="mt-4" style="color: black;"></div>
+    <button id="new-game-btn" class="btn btn-primary mt-4" style="display: none; margin: 10px auto;" onclick="startNewGame()">Start New Game</button>
 </div>
 
 <script>
@@ -107,34 +124,34 @@
     const scoreHistoryElement = document.getElementById("score-history");
     const newGameButton = document.getElementById("new-game-btn");
 
-    function startGame() {
-        playerName = document.getElementById("player-name").value.trim();
-        if (playerName !== "") {
-            document.getElementById("player-info").style.display = "none";
+    function login() {
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+        // Simulated login logic - allow any non-empty username and password
+        if (username !== "" && password !== "") {
+            playerName = username;
+            document.getElementById("login-container").style.display = "none"; // Hide the login container
+            document.getElementById("story").style.display = "block"; // Display the story
+            document.body.style.backgroundImage = "url('images/game_bg.jpg')"; // Change background image
             displayQuestion();
         } else {
-            alert("Please enter your name.");
+            alert("Please enter both username and password.");
         }
     }
 
     function displayQuestion() {
+        document.getElementById("question-container").style.display = "block"; // Display the question container
         if (currentQuestion < questions.length) {
             const question = questions[currentQuestion];
-            questionElement.innerHTML = "";
-            p_tag = document.createElement("p");
-            p_tag.textContent = question.question;
-            questionElement.appendChild(p_tag);
+            questionElement.innerHTML = question.question;
             choicesElement.innerHTML = "";
             question.choices.forEach((choice, index) => {
                 const button = document.createElement("button");
                 button.textContent = choice;
-                if(index == 0) 
-                    button.className = "a_choice";
-                else
-                    button.className = "b_choice";
+                button.classList.add("btn", "btn-primary");
                 button.onclick = () => checkAnswer(index);
                 choicesElement.appendChild(button);
-            });    
+            });
         } else {
             endGame();
         }
@@ -153,7 +170,7 @@
         scoreHistory.push(playerScore);
         scoreHistory.sort((a, b) => b.score - a.score); // Sort in descending order of score
         updateScoreHistory();
-        questionElement.textContent = "Game Over";
+        questionElement.innerHTML = "Game Over";
         choicesElement.innerHTML = `<p>Your final score is: ${score}</p>`;
         newGameButton.style.display = "block";
     }
@@ -162,8 +179,13 @@
         currentQuestion = 0;
         score = 0;
         playerName = "";
-        document.getElementById("player-name").value = "";
-        document.getElementById("player-info").style.display = "block";
+        // scoreHistory = [];
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("login-container").style.display = "block";
+        document.getElementById("story").style.display = "none"; // Hide the story
+        document.getElementById("question-container").style.display = "none"; // Hide the question container
+        document.body.style.backgroundImage = "linear-gradient(to bottom, #000080, #000000)"; // Change background gradient
         questionElement.innerHTML = "";
         choicesElement.innerHTML = "";
         scoreHistoryElement.innerHTML = "";
@@ -178,7 +200,6 @@
             scoreHistoryElement.appendChild(scoreEntry);
         });
     }
-
 </script>
 </body>
 </html>
