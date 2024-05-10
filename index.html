@@ -9,28 +9,37 @@
     body {
         font-family: Arial, sans-serif;
         text-align: center;
-        background-image: linear-gradient(to bottom, #000080, #000000);
+        background-color: #000000;
+        /* background-image: linear-gradient(to bottom, #000080, #000000); */
         color: white;
     }
     #login-container {
         max-width: 800px;
         margin: 0 auto;
         padding: 20px;
+        /* background-color: rgba(0, 0, 0, 0.4); */
+        background-image: linear-gradient(to bottom, #000080, #000000);
     }
     #login-logo {
         margin-bottom: 20px;
     }
     #login-form {
         margin-bottom: 20px;
+        max-width: 600px;
+    }
+    #game-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background-image: url('images/game_bg.jpg');
+        background-size: contain;
+        background-position: center;
+        display: none;
     }
     #story {
         max-width: 800px;
         margin: 0 auto;
         padding: 20px;
-        background-image: url('images/background.jpg');
-        background-size: cover;
-        background-position: center;
-        display: none; /* Initially hidden */
     }
     #question-container {
         max-width: 800px;
@@ -46,7 +55,7 @@
     }
     #score-history {
         margin-top: 20px;
-        text-align: left;
+        text-align: center;
     }
 </style>
 </head>
@@ -55,7 +64,7 @@
     <div id="login-logo">
         <img src="images/logo.png" alt="Logo" style="max-width: 200px;">
     </div>
-    <div id="login-form">
+    <div id="login-form" class="mx-auto">
         <form>
             <div class="form-group">
                 <label for="username" class="text-white">Username:</label>
@@ -69,7 +78,7 @@
         </form>
     </div>
 </div>
-
+<div id="game-container">
 <div id="story" class="mt-4">
     <p>Welcome to "Murder at Ravenwood Manor." You are an esteemed detective invited to solve the mysterious death of 
         Lord Alexander Ravenwood, a wealthy aristocrat found dead in his study. As you delve into the investigation, 
@@ -78,11 +87,12 @@
 </div>
 
 <div id="question-container" style="display: none;">
-    <h1 class="mt-5" style="color: red;">Murder Mystery Game</h1>
-    <div id="question" class="question-container mt-4" style="color: black; font-weight: bolder;"></div>
+    <h1 class="mt-5" style="color: red; font-weight: bold;">Murder Mystery Game</h1>
+    <div id="question" class="question-container mt-4 font-weight-bold" style="color: black; font-size: x-large;"></div>
     <div id="choices" class="mt-4" style="color: black;"></div>
     <div id="score-history" class="mt-4" style="color: black;"></div>
     <button id="new-game-btn" class="btn btn-primary mt-4" style="display: none; margin: 10px auto;" onclick="startNewGame()">Start New Game</button>
+</div>
 </div>
 
 <script>
@@ -131,8 +141,7 @@
         if (username !== "" && password !== "") {
             playerName = username;
             document.getElementById("login-container").style.display = "none"; // Hide the login container
-            document.getElementById("story").style.display = "block"; // Display the story
-            document.body.style.backgroundImage = "url('images/game_bg.jpg')"; // Change background image
+            document.getElementById("game-container").style.display = "block"; // Display the story
             displayQuestion();
         } else {
             alert("Please enter both username and password.");
@@ -183,9 +192,9 @@
         document.getElementById("username").value = "";
         document.getElementById("password").value = "";
         document.getElementById("login-container").style.display = "block";
-        document.getElementById("story").style.display = "none"; // Hide the story
-        document.getElementById("question-container").style.display = "none"; // Hide the question container
-        document.body.style.backgroundImage = "linear-gradient(to bottom, #000080, #000000)"; // Change background gradient
+        document.getElementById("game-container").style.display = "none"; // Hide the story
+        // document.getElementById("question-container").style.display = "none"; // Hide the question container
+        // document.getElementById("story").style.backgroundImage = "linear-gradient(to bottom, #000080, #000000)"; // Change background gradient
         questionElement.innerHTML = "";
         choicesElement.innerHTML = "";
         scoreHistoryElement.innerHTML = "";
