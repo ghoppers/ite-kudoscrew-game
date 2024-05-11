@@ -14,11 +14,14 @@
         color: white;
     }
     #login-container {
-        max-width: 800px;
+        max-width: 900px;
+        height: 900px;
         margin: 0 auto;
         padding: 20px;
         /* background-color: rgba(0, 0, 0, 0.4); */
-        background-image: linear-gradient(to bottom, #000080, #000000);
+        background-image: url('images/gamebg.png');
+        background-size: cover;
+        background-position: center;
     }
     #login-logo {
         margin-bottom: 20px;
@@ -27,12 +30,16 @@
         margin-bottom: 20px;
         max-width: 600px;
     }
+    .form-group {
+        text-align: left;
+    }
     #game-container {
-        max-width: 1000px;
+        max-width: 900px;
+        height: 900px;
         margin: 0 auto;
         padding: 20px;
-        background-image: url('images/game_bg.jpg');
-        background-size: contain;
+        background-image: url('images/gamebg.png');
+        background-size: cover;
         background-position: center;
         display: none;
     }
@@ -46,6 +53,18 @@
         margin: 0 auto;
         padding: 20px;
         background-color: rgba(255, 255, 255, 0.7); /* Add a semi-transparent white background */
+    }
+    #question {
+        height: 250px;
+        max-width: 450px;
+        background-image: url('images/qnsbg.png');
+        background-size: cover;
+        background-position: center;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 50px;
     }
     #choices .btn {
         margin: 10px;
@@ -64,31 +83,23 @@
     <div id="login-logo">
         <img src="images/logo.png" alt="Logo" style="max-width: 200px;">
     </div>
-    <div id="login-form" class="mx-auto">
+    <div id="login-form" class="mx-auto mt-5">
         <form>
             <div class="form-group">
-                <label for="username" class="text-white">Username:</label>
+                <label for="username" class="text-white">NAME</label>
                 <input type="text" class="form-control" id="username" required>
             </div>
             <div class="form-group">
-                <label for="password" class="text-white">Password:</label>
-                <input type="password" class="form-control" id="password" required>
+                <label for="email" class="text-white">EMAIL</label>
+                <input type="text" class="form-control" id="email" required>
             </div>
-            <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+            <button type="button" class="btn btn-primary" onclick="login()">Start</button>
         </form>
     </div>
 </div>
 <div id="game-container">
-<div id="story" class="mt-4">
-    <p>Welcome to "Murder at Ravenwood Manor." You are an esteemed detective invited to solve the mysterious death of 
-        Lord Alexander Ravenwood, a wealthy aristocrat found dead in his study. As you delve into the investigation, 
-        you uncover secrets, lies, and motives lurking within the manor's walls. Can you unravel the truth and bring the 
-        perpetrator to justice?</p>
-</div>
-
 <div id="question-container" style="display: none;">
-    <h1 class="mt-5" style="color: red; font-weight: bold;">Murder Mystery Game</h1>
-    <div id="question" class="question-container mt-4 font-weight-bold" style="color: black; font-size: x-large;"></div>
+    <div id="question" class="question-container mt-4 mx-auto align-middle font-weight-bold" style="color: black; font-size: large;"></div>
     <div id="choices" class="mt-4" style="color: black;"></div>
     <div id="score-history" class="mt-4" style="color: black;"></div>
     <button id="new-game-btn" class="btn btn-primary mt-4" style="display: none; margin: 10px auto;" onclick="startNewGame()">Start New Game</button>
@@ -98,29 +109,31 @@
 <script>
     const questions = [
         {
-            question: "While examining the crime scene, do you:",
-            choices: ["Focus on the broken window, suggesting an intruder.", "Pay attention to the overturned furniture, indicating a struggle."],
+            question: "Your character is a Manager trying to identify a cyber security breach. Which action would best describe you?",
+            choices: ["You would first evaluate the severity of the breach, considering how it affects the employees, data, systems and company.", 
+            "You are intrigued by the breach and dig deep, exploring unconventional angles and seeking patterns on how the hackers breached the system."],
             answer: 1 // Index of correct answer in choices array
         },
         {
-            question: "Questioning the suspects, you discover:",
-            choices: ["Lady Eleanor had a heated argument with the victim.", "Butler James was seen near the study moments before the murder."],
+            question: "<i>&quot;We want $$ or me delete everything your system.&quot;</i><br>When you read the hacker's message above, you...",
+            choices: ["You laughed at the silly and poor language used.", "You read it carefully, analyzing the message."],
             answer: 0
         },
         {
-            question: "Reviewing the evidence, you find:",
-            choices: ["A torn piece of fabric matching Lady Eleanor's dress.", "Fingerprint evidence pointing to Butler James."],
+            question: "As you inspected the cyber security breach, your next action would be to...",
+            choices: ["follow established protocols, notifying the relevant parties and initiating incident response plans.", 
+            "challenge existing security protocols, propose solutions, perhaps even turning the breach into an opportunity."],
             answer: 1
         },
         {
-            question: "Analyzing alibis, you learn:",
-            choices: ["Lady Eleanor was attending a social event miles away.", "Butler James claims he was in the kitchen during the incident."],
-            answer: 1
-        },
-        {
-            question: "Finally, who do you accuse as the murderer?",
-            choices: ["Lady Eleanor", "Butler James"],
+            question: "When you stumbled upon a meeting room door ajar, what would you do?",
+            choices: ["You peeked inside, curious about the chaos. Disorder can be fascinating.", "You immediately closed it, ensuring everything was back in its place."],
             answer: 0
+        },
+        {
+            question: "Before leaving the office, you scanned the office, describe what do you see?",
+            choices: ["A neat and tidy office with photographs in a similar theme of décor.", "An inviting office distributed with items of memorabilia."],
+            answer: 1
         }
     ];
 
@@ -136,15 +149,15 @@
 
     function login() {
         const username = document.getElementById("username").value.trim();
-        const password = document.getElementById("password").value.trim();
+        const email = document.getElementById("email").value.trim();
         // Simulated login logic - allow any non-empty username and password
-        if (username !== "" && password !== "") {
+        if (username !== "" && email !== "") {
             playerName = username;
             document.getElementById("login-container").style.display = "none"; // Hide the login container
             document.getElementById("game-container").style.display = "block"; // Display the story
             displayQuestion();
         } else {
-            alert("Please enter both username and password.");
+            alert("Please enter both NAME and EMAIL.");
         }
     }
 
@@ -152,7 +165,7 @@
         document.getElementById("question-container").style.display = "block"; // Display the question container
         if (currentQuestion < questions.length) {
             const question = questions[currentQuestion];
-            questionElement.innerHTML = question.question;
+            questionElement.innerHTML = "<p>"+question.question+"</p>";
             choicesElement.innerHTML = "";
             question.choices.forEach((choice, index) => {
                 const button = document.createElement("button");
@@ -168,6 +181,8 @@
 
     function checkAnswer(choice) {
         if (choice === questions[currentQuestion].answer) {
+            score += 7;
+        } else {
             score += 5;
         }
         currentQuestion++;
@@ -179,7 +194,7 @@
         scoreHistory.push(playerScore);
         scoreHistory.sort((a, b) => b.score - a.score); // Sort in descending order of score
         updateScoreHistory();
-        questionElement.innerHTML = "Game Over";
+        questionElement.innerHTML = "Thank you for participating in our game.";
         choicesElement.innerHTML = `<p>Your final score is: ${score}</p>`;
         newGameButton.style.display = "block";
     }
@@ -190,7 +205,7 @@
         playerName = "";
         // scoreHistory = [];
         document.getElementById("username").value = "";
-        document.getElementById("password").value = "";
+        document.getElementById("email").value = "";
         document.getElementById("login-container").style.display = "block";
         document.getElementById("game-container").style.display = "none"; // Hide the story
         // document.getElementById("question-container").style.display = "none"; // Hide the question container
