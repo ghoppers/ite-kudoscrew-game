@@ -53,7 +53,7 @@
     }
     #question {
         max-height: 300px;
-        min-height: 200px;
+        min-height: 250px;
         max-width: 100%;
         background-image: url('images/qnsbg.png');
         background-size: 100% 100%;
@@ -63,7 +63,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 10px 65px;
+        padding: 10px 50px;
     }
     #choices .btn {
         margin: 10px;
@@ -108,7 +108,7 @@
 <script>
     const questions = [
         {
-            question: "Your character is a Manager trying to identify a cyber security breach. Which action would best describe you?",
+            question: "Your character is a Manager trying to identify a cyber security breach. <br>Which action would best describe you?",
             choices: ["You would first evaluate the severity of the breach, considering how it affects the employees, data, systems and company.", 
             "You are intrigued by the breach and dig deep, exploring unconventional angles and seeking patterns on how the hackers breached the system."],
             answer: 1 // Index of correct answer in choices array
@@ -119,18 +119,18 @@
             answer: 0
         },
         {
-            question: "As you inspected the cyber security breach, your next action would be to...",
+            question: "As you inspected the cyber security breach, <br>your next action would be to...",
             choices: ["follow established protocols, notifying the relevant parties and initiating incident response plans.", 
             "challenge existing security protocols, propose solutions, perhaps even turning the breach into an opportunity."],
             answer: 1
         },
         {
-            question: "When you stumbled upon a meeting room door ajar, what would you do?",
+            question: "When you stumbled upon a meeting room door ajar, <br>what would you do?",
             choices: ["You peeked inside, curious about the chaos. Disorder can be fascinating.", "You immediately closed it, ensuring everything was back in its place."],
             answer: 0
         },
         {
-            question: "Before leaving the office, you scanned the office, describe what do you see?",
+            question: "Before leaving the office, you scanned the office, <br>describe what do you see?",
             choices: ["A neat and tidy office with photographs in a similar theme of décor.", "An inviting office distributed with items of memorabilia."],
             answer: 1
         }
