@@ -28,3 +28,8 @@ This command will start the Expo development server.
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+## Video Demo
+
+https://github.com/ghoppers/ite-kudoscrew-game/assets/47889966/c68b274c-cbea-4437-9e91-c749ca3ae68d
+
