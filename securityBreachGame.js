@@ -88,11 +88,11 @@ const SecurityBreachGame = ({ playerName }) => {
 	};
 
 	return (
-		<Container style={styles.container}>
+		<Container>
 			<ScrollView contentContainerStyle={styles.content}>
 				{currentQuestion < questions.length ? (
 					<>
-						<View style={styles.questionContainer}>
+						<View style={styles.content}>
 							<Text style={styles.questionText}>
 								{questions[currentQuestion].question}
 							</Text>
@@ -101,11 +101,8 @@ const SecurityBreachGame = ({ playerName }) => {
 									key={index}
 									style={styles.choiceButton}
 									onPress={() => checkAnswer(index)}
-									activeOpacity={0.7} // Optional for visual feedback
 								>
-									<Text style={styles.buttonText} numberOfLines={0}>
-										{choice}
-									</Text>
+									<Text style={styles.buttonText}>{choice}</Text>
 								</TouchableOpacity>
 							))}
 						</View>
@@ -153,9 +150,16 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		paddingVertical: 5,
 		fontSize: 16,
-		flexWrap: "wrap",
-		flexShrink: 1,
+		justifyContent: "center",
 		flex: 1,
+	},
+	choiceButton: {
+		marginBottom: 10,
+		backgroundColor: "#007bff",
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 20,
+		width: "100%", // Ensure button takes full width
 	},
 	questionContainer: {
 		width: "100%",
@@ -169,14 +173,6 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 		textAlign: "center",
 		fontSize: 18,
-	},
-	choiceButton: {
-		marginBottom: 10,
-		backgroundColor: "#007bff",
-		justifyContent: "center",
-		alignItems: "center",
-		padding: 10,
-		minHeight: height > 800 ? 50 : 44, // Use dynamic dimensions based on device height
 	},
 	backButton: {
 		marginTop: 20,
