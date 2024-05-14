@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -6,18 +6,19 @@ import {
 	StyleSheet,
 	ScrollView,
 	TouchableOpacity,
-	Platform,
 	Dimensions,
 } from "react-native";
 import { Container, Content, Button as NativeButton } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
-const SecurityBreachGame = ({ playerName }) => {
+const SecurityBreachGame = ({ route }) => {
+	const { playerName } = route.params;
 	const navigation = useNavigation();
 
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [score, setScore] = useState(0);
 	const [scoreHistory, setScoreHistory] = useState([]);
+	const [leaderboard, setLeaderboard] = useState([]);
 
 	const questions = [
 		{
@@ -74,13 +75,61 @@ const SecurityBreachGame = ({ playerName }) => {
 			setScore(score + 5);
 		}
 		setCurrentQuestion(currentQuestion + 1);
+
+		if (currentQuestion + 1 === questions.length) {
+			console.log("End of game reached.");
+			console.log(score);
+			endGame();
+		}
 	};
 
-	const endGame = () => {
-		const playerScore = { name: playerName, score: score };
+	const submitScore = async () => {
+		try {
+			console.log("Submitting score...");
+			console.log(JSON.stringify({ name: playerName, score }));
+			const response = await fetch("https://darrow.owo.sg/api/submitScore", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ name: playerName, score }),
+			});
+			console.log("Response:", response);
+			if (!response.ok) {
+				const errorData = await response.json(); // Parse error response body as JSON
+				throw new Error(errorData.error || "Failed to submit score"); // Throw error message from response body
+			}
+			const data = await response.json();
+			console.log("Score submitted successfully:", data);
+		} catch (error) {
+			console.error("Error submitting score:", error);
+		}
+	};
+
+	const fetchLeaderboard = async () => {
+		try {
+			const response = await fetch("https://darrow.owo.sg/api/getScores");
+			console.log("Response:", response);
+			if (!response.ok) {
+				throw new Error("Failed to fetch leaderboard");
+			}
+			const leaderboard = await response.json();
+			setLeaderboard(leaderboard);
+			console.log("Leaderboard fetched successfully:", leaderboard);
+		} catch (error) {
+			console.error("Error fetching leaderboard:", error);
+		}
+	};
+
+	const endGame = async () => {
+		console.log("Ending game...");
+		const playerScore = { name: playerName, score };
 		const updatedScoreHistory = [...scoreHistory, playerScore];
 		updatedScoreHistory.sort((a, b) => b.score - a.score); // Sort in descending order of score
 		setScoreHistory(updatedScoreHistory);
+		await submitScore();
+		await fetchLeaderboard();
+		console.log("Game ended.");
 	};
 
 	const handleBack = () => {
@@ -110,7 +159,17 @@ const SecurityBreachGame = ({ playerName }) => {
 				) : (
 					<View style={styles.questionContainer}>
 						<Text>Thank you for participating in our game.</Text>
-						<Text>Your final score is: {score}</Text>
+						<Text>Your final score is: {score - 5}</Text>
+						{leaderboard.length > 0 && (
+							<View style={styles.leaderboardContainer}>
+								<Text style={styles.leaderboardTitle}>Leaderboard</Text>
+								{leaderboard.slice(0, 5).map((entry, index) => (
+									<Text key={index} style={styles.leaderboardEntry}>
+										{index + 1}. {entry.name}: {entry.score}
+									</Text>
+								))}
+							</View>
+						)}
 						<NativeButton style={styles.backButton} onPress={handleBack}>
 							<Text style={styles.buttonText}>Back</Text>
 						</NativeButton>
@@ -177,6 +236,21 @@ const styles = StyleSheet.create({
 	backButton: {
 		marginTop: 20,
 		backgroundColor: "gray",
+	},
+	leaderboardContainer: {
+		width: "100%",
+		padding: 20,
+		marginTop: 20,
+	},
+	leaderboardTitle: {
+		fontSize: 20,
+		fontWeight: "bold",
+		marginBottom: 10,
+		textAlign: "center",
+	},
+	leaderboardEntry: {
+		fontSize: 16,
+		textAlign: "center",
 	},
 	scoreHistoryContainer: {
 		width: "100%",

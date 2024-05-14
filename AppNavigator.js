@@ -2,8 +2,8 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./login";
-import gamePage from "./gamePage";
-import securityBreachGame from "./securityBreachGame";
+import GamePage from "./gamePage";
+import SecurityBreachGame from "./securityBreachGame";
 
 const Stack = createStackNavigator();
 
@@ -18,7 +18,7 @@ export default function AppNavigator() {
 				/>
 				<Stack.Screen
 					name="Games"
-					component={gamePage}
+					component={GamePage}
 					options={{
 						headerLeft: null,
 						headerTitleAlign: "center",
@@ -26,7 +26,7 @@ export default function AppNavigator() {
 				/>
 				<Stack.Screen
 					name="SecurityBreach"
-					component={securityBreachGame}
+					component={SecurityBreachGame}
 					options={{
 						headerLeft: null,
 						headerTitleAlign: "center",

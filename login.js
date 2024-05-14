@@ -40,9 +40,10 @@ export default function Login() {
 		} else {
 			console.log("Name: ", name);
 			console.log("Email: ", email);
-			navigation.navigate("Games");
+			navigation.navigate("Games", { playerName: name });
 		}
 	};
+
 
 	return (
 		<Container style={styles.container}>
